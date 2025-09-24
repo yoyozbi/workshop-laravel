@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookCreateRequest;
+use App\Http\Requests\BookUpdateRequest;
 use App\Models\Author;
 use Illuminate\Http\Request;
 use App\Models\Book;
@@ -57,13 +58,13 @@ class BookController extends Controller
     public function edit(string $id): View
     {
         $book = Book::findOrFail($id);
-        return view('books.edit', ['book' => $book]);
+        return view('books.edit', ['book' => $book, 'authors' => Author::all()]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(BookUpdateRequest $request, string $id): RedirectResponse
     {
         $book = Book::findOrFail($id);
 

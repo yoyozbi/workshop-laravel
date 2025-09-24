@@ -26,7 +26,7 @@
                         </div>
                         <div class="form-group col-6">
                             <strong>ISBN :</strong>
-                            {{$book->isbn}}
+                            {{$book->isbn()}}
                         </div>
                         <div class="form-group col-6">
                             <strong>Nombre de pages :</strong>
