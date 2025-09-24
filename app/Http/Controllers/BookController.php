@@ -40,7 +40,7 @@ class BookController extends Controller
         $book = new Book($rqt->all());
         $book->save();
 
-        return to_route('books.index', ['books' => DB::table('books')->simplePaginate(5)])->withSuccess('Book created successfully.');
+        return to_route('books.index')->withSuccess('Book created successfully.');
     }
 
     /**
@@ -92,7 +92,7 @@ class BookController extends Controller
             $book->save();
         }
 
-        return to_route('books.show', ['book' => $book])->with('success', 'Book updated successfully.');
+        return to_route('books.show')->withSuccess('Book updated successfully.');
     }
 
     /**
@@ -102,13 +102,13 @@ class BookController extends Controller
     {
         Book::destroy($id);
 
-        return to_route('books.index', ['books' => DB::table('books')->simplePaginate(5)])->with('success', 'Book deleted successfully.');
+        return to_route('books.index')->withSuccess('Book deleted successfully.');
     }
 
     public function order(): View
     {
         return view('books.order', [
-            'books' => DB::table('books')->where('quantity', '<=', 0)->simplePaginate(5)
+            'books' => Book::where('quantity', '<=', 0)->simplePaginate(5)
         ]);
     }
 }

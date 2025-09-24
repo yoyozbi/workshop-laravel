@@ -23,7 +23,7 @@ class BookCreateRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:5|max:25',
-            'isbn' => 'string|regex:/^(\d{3}-\d{2}-\d{5}-\d{2}-\d{1})|(\d{13})$/i',
+            'isbn' => ['string', 'regex:/^(\d{3}-\d{2}-\d{5}-\d{2}-\d{1})|(\d{13})$/i'],
             'description' => 'required|string|min:5|max:200',
             'pages' => 'required|int|gt:0|lt:40000',
             'quantity' => 'required|int|min:0|max:99',

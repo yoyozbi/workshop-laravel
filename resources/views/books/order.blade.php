@@ -21,7 +21,7 @@
         @foreach($books as $book)
             <tr>
                 <td>{{ $book->title }}</td>
-                <td>@if(null !== $book->author_id) {{ $book->author->name }} @else No author @endif</td>
+                <td>@if(isset($book->author)) {{ $book->author->name }} @else No author @endif</td>
                 <td>{{ $book->description }}</td>
                 <td>{{ $book->pages }}</td>
                 <td>{{ $book->quantity }}</td>
