@@ -2,10 +2,10 @@
 
 @section('content')
 
-<h1>Livres</h1>
+<h1>Commandes</h1>
 
 <a href="{{ route('books.create') }}" class="btn btn-primary float-right mb-2">Ajouter un livre</a>
-
+@if($books->count() > 0)
 <table class="table">
     <thead>
         <tr>
@@ -38,5 +38,9 @@
         @endforeach
     </tbody>
 </table>
+
+@else
+    <p>Il n'y a pas de livre a commandé</p>
+@endif
 {{ $books->links() }}
 @endsection

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookCreateRequest;
+use App\Models\Author;
 use Illuminate\Http\Request;
 use App\Models\Book;
-
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -14,8 +17,9 @@ class BookController extends Controller
      */
     public function index(): View
     {
+        $books = Book::simplePaginate(5);
         return view('books.index', [
-            'books' => Book::all()
+            'books' => $books
         ]);
     }
 
@@ -24,23 +28,18 @@ class BookController extends Controller
      */
     public function create(): View
     {
-        return view('books.create');
+        return view('books.create', ['authors' => Author::all()]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): View
+    public function store(BookCreateRequest $rqt): RedirectResponse
     {
-        $book = new Book();
-        $book->title = $request->title;
-        $book->isbn = $request->isbn;
-        $book->description = $request->description;
-        $book->pages = $request->pages;
-        $book->quantity = $request->quantity;
+        $book = new Book($rqt->all());
         $book->save();
 
-        return view('books.index', ['books' => Book::all()])->with('success', 'Book created successfully.');
+        return to_route('books.index', ['books' => DB::table('books')->simplePaginate(5)])->withSuccess('Book created successfully.');
     }
 
     /**
@@ -64,7 +63,7 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): View
+    public function update(Request $request, string $id): RedirectResponse
     {
         $book = Book::findOrFail($id);
 
@@ -92,16 +91,23 @@ class BookController extends Controller
             $book->save();
         }
 
-        return view('books.show', ['book' => $book])->with('success', 'Book updated successfully.');
+        return to_route('books.show', ['book' => $book])->with('success', 'Book updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): View
+    public function destroy(string $id): RedirectResponse
     {
         Book::destroy($id);
 
-        return view('books.index', ['books' => Book::all()])->with('success', 'Book deleted successfully.');
+        return to_route('books.index', ['books' => DB::table('books')->simplePaginate(5)])->with('success', 'Book deleted successfully.');
+    }
+
+    public function order(): View
+    {
+        return view('books.order', [
+            'books' => DB::table('books')->where('quantity', '<=', 0)->simplePaginate(5)
+        ]);
     }
 }
